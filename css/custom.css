@@ -1,0 +1,78 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    /*background-color: #f5f5f5;*/
+}
+
+.footer > .container > p {
+    margin-top: 20px;
+}
+
+.centralize {
+    width: 100%;
+    background-color: #f8f8f8;
+}
+
+.centralize > a > img {
+    max-width: 250px;
+    margin-bottom: 30px;
+    transition: 1s;
+}
+
+.navbar-nav {
+    flex-direction: row;
+}
+
+.nav-link {
+    padding-right: .5rem !important;
+    padding-left: .5rem !important;
+}
+
+/* Fixes dropdown menus placed on the right side */
+.ml-auto .dropdown-menu {
+    left: auto !important;
+    right: 0px;
+}
+
+.jumbotron {
+    padding: 1rem 0rem;
+    margin-bottom: 1rem;
+}
+
+.vertAlgn {
+    padding-top: calc(0.375rem + 1px);
+    padding-bottom: calc(0.375rem + 1px);
+}
+
+.deptStatusAlert {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.deptStatusRow {
+    margin-bottom: 10px;
+}
+
+@media (max-width: 767px) {
+    .centralize > a > img {
+        max-width: 150px;
+        transition: 1s;
+    }
+
+    .footer {
+        height: 80px;
+    }
+}
