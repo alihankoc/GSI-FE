@@ -5,6 +5,9 @@
  * Date: 27.04.2019
  * Time: 23:02
  */
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 include_once 'ApiCaller.php';
 
@@ -13,12 +16,12 @@ session_start();
 $apiCaller = new ApiCaller('1', $_SESSION["token"]);
 
 $items = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/hotoQR',
+    'api_url' => $_ENV['LINK'].'hotoQR',
     'api_method' => 'get',
 ));
 
 /*$items = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/addExpense',
+    'api_url' => $_ENV['LINK'].'addExpense',
     'api_method' => 'post',
     'operationID' => 81,
     'operationExpenseContent' => 'Yeni Deneme',

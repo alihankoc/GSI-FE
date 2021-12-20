@@ -5,6 +5,9 @@
  * Date: 15.02.2019
  * Time: 02:14
  */
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 
 include_once "public_functions.php";

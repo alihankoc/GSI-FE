@@ -5,6 +5,9 @@
  * Date: 14.02.2019
  * Time: 02:54
  */
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 include_once "url_slug.php";
 include_once "ApiCaller.php";

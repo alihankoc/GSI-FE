@@ -5,6 +5,9 @@
  * Date: 6.05.2019
  * Time: 00:18
  */
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 include_once 'ApiCaller.php';
 
@@ -14,14 +17,14 @@ $apiCaller = new ApiCaller('1', $_SESSION["token"]);
 
 
 /*$items = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/viewUsers',
+    'api_url' => $_ENV['LINK'].'viewUsers',
     'api_method' => 'get',
 ));*/
 
 function deleteLocation($apiCaller, $locationID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/deleteLocation/' . $locationID,
+        'api_url' => $_ENV['LINK'].'deleteLocation/' . $locationID,
         'api_method' => 'delete',
     ));
 
@@ -45,7 +48,7 @@ function deleteLocation($apiCaller, $locationID)
 function deleteOffice($apiCaller, $officeID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/deleteOffice/' . $officeID,
+        'api_url' => $_ENV['LINK'].'deleteOffice/' . $officeID,
         'api_method' => 'delete',
     ));
 
@@ -69,7 +72,7 @@ function deleteOffice($apiCaller, $officeID)
 function saveCustomer($apiCaller, $companyName, $companyAddress, $companyEmail, $companyPhone, $contactName, $contactSurname, $contactTitle, $contactEmail, $contactPhone, $companyShortcode)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/newCustomer/',
+        'api_url' => $_ENV['LINK'].'newCustomer/',
         'api_method' => 'post',
         'companyName' => $companyName,
         'companyShortcode' => $companyShortcode,
@@ -103,7 +106,7 @@ function saveCustomer($apiCaller, $companyName, $companyAddress, $companyEmail, 
 function deleteCustomer($apiCaller, $customerID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/deleteCustomer/' . $customerID,
+        'api_url' => $_ENV['LINK'].'deleteCustomer/' . $customerID,
         'api_method' => 'delete',
     ));
 
@@ -128,7 +131,7 @@ function saveUser($apiCaller, $name, $surname, $email, $password, $phone, $type,
 {
 
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/newUser',
+        'api_url' => $_ENV['LINK'].'newUser',
         'api_method' => 'post',
         'name' => $name,
         'surname' => $surname,
@@ -161,7 +164,7 @@ function saveUser($apiCaller, $name, $surname, $email, $password, $phone, $type,
 function deleteUser($apiCaller, $userID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/deleteUser/' . $userID,
+        'api_url' => $_ENV['LINK'].'deleteUser/' . $userID,
         'api_method' => 'delete',
     ));
 
@@ -186,7 +189,7 @@ function deleteUser($apiCaller, $userID)
 function getSelectedUser($apiCaller, $userID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/viewUser/' . $userID,
+        'api_url' => $_ENV['LINK'].'viewUser/' . $userID,
         'api_method' => 'get',
     ));
 
@@ -196,7 +199,7 @@ function getSelectedUser($apiCaller, $userID)
 function getSelectedCustomer($apiCaller, $customerID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/viewCustomer/' . $customerID,
+        'api_url' => $_ENV['LINK'].'viewCustomer/' . $customerID,
         'api_method' => 'get',
     ));
 
@@ -206,7 +209,7 @@ function getSelectedCustomer($apiCaller, $customerID)
 function getLocationOffices($apiCaller, $locationID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/getLocationOffices/' . $locationID,
+        'api_url' => $_ENV['LINK'].'getLocationOffices/' . $locationID,
         'api_method' => 'get',
     ));
 
@@ -217,7 +220,7 @@ function saveLocation($apiCaller, $locationName)
 {
 
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/newLocation/',
+        'api_url' => $_ENV['LINK'].'newLocation/',
         'api_method' => 'post',
         'locationName' => $locationName,
     ));
@@ -244,7 +247,7 @@ function saveOffice($apiCaller, $officeName, $locationID)
 {
 
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/newOffice/',
+        'api_url' => $_ENV['LINK'].'newOffice/',
         'api_method' => 'post',
         'officeName' => $officeName,
         'officeLocation' => $locationID,
@@ -271,7 +274,7 @@ function saveOffice($apiCaller, $officeName, $locationID)
 function deleteAnalysis($apiCaller, $analysisID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/deleteAnalysis/' . $analysisID,
+        'api_url' => $_ENV['LINK'].'deleteAnalysis/' . $analysisID,
         'api_method' => 'delete',
     ));
 
@@ -295,7 +298,7 @@ function deleteAnalysis($apiCaller, $analysisID)
 function deleteAnalysisCondition($apiCaller, $analysisConditionID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/deleteAnalysisCondition/' . $analysisConditionID,
+        'api_url' => $_ENV['LINK'].'deleteAnalysisCondition/' . $analysisConditionID,
         'api_method' => 'delete',
     ));
 
@@ -319,7 +322,7 @@ function deleteAnalysisCondition($apiCaller, $analysisConditionID)
 function deleteProcessType($apiCaller, $processTypeID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/deleteProcessType/' . $processTypeID,
+        'api_url' => $_ENV['LINK'].'deleteProcessType/' . $processTypeID,
         'api_method' => 'delete',
     ));
 
@@ -343,7 +346,7 @@ function deleteProcessType($apiCaller, $processTypeID)
 function deleteSurveillanceType($apiCaller, $surveillanceTypeID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/deleteSurveillanceType/' . $surveillanceTypeID,
+        'api_url' => $_ENV['LINK'].'deleteSurveillanceType/' . $surveillanceTypeID,
         'api_method' => 'delete',
     ));
 
@@ -368,7 +371,7 @@ function saveAnalysis($apiCaller, $analysisName)
 {
 
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/newAnalysis/',
+        'api_url' => $_ENV['LINK'].'newAnalysis/',
         'api_method' => 'post',
         'analysisName' => $analysisName,
     ));
@@ -395,7 +398,7 @@ function saveAnalysisCondition($apiCaller, $analysisConditionName)
 {
 
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/newAnalysisCondition/',
+        'api_url' => $_ENV['LINK'].'newAnalysisCondition/',
         'api_method' => 'post',
         'analysisConditionName' => $analysisConditionName,
     ));
@@ -422,7 +425,7 @@ function saveProcessType($apiCaller, $processTypeName)
 {
 
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/newProcessType/',
+        'api_url' => $_ENV['LINK'].'newProcessType/',
         'api_method' => 'post',
         'processTypeName' => $processTypeName,
     ));
@@ -449,7 +452,7 @@ function saveSurveillanceType($apiCaller, $surveillanceTypeName)
 {
 
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/newSurveillanceType/',
+        'api_url' => $_ENV['LINK'].'newSurveillanceType/',
         'api_method' => 'post',
         'surveillanceTypeName' => $surveillanceTypeName,
     ));

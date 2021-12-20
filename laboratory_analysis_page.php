@@ -5,6 +5,9 @@
  * Date: 14.02.2019
  * Time: 22:30
  */
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 include_once "url_slug.php";
 include_once "ApiCaller.php";
@@ -39,15 +42,15 @@ switch ($_SESSION["user_type_id"]) {
 $apiCaller = new ApiCaller('1', $_SESSION['token']);
 
 $waitingForms = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/getLaboratoryForms/1',
+    'api_url' => $_ENV['LINK'].'getLaboratoryForms/1',
     'api_method' => 'get',
 ));
 $activeForms = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/getLaboratoryForms/2',
+    'api_url' => $_ENV['LINK'].'getLaboratoryForms/2',
     'api_method' => 'get',
 ));
 $completedForms = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/getLaboratoryForms/3',
+    'api_url' => $_ENV['LINK'].'getLaboratoryForms/3',
     'api_method' => 'get',
 ));
 ?>
@@ -127,6 +130,10 @@ $completedForms = $apiCaller->sendRequest(array(
                 <li class="nav-item">
                     <a class="nav-link active" data-toggle="pill" href="#operational">
                         Operational Analysis</a>
+                </li>
+                <li class="nav-item" style="margin-left: 20px;">
+                    <a class="nav-link" href="external_laboratory_analysis_page.php">
+                        External Analysis</a>
                 </li>
             </ul>
         </div>
@@ -279,7 +286,13 @@ $completedForms = $apiCaller->sendRequest(array(
                                                                 Form</a>
                                                         <?php } ?>
                                                         <?php if (isset($frm->isOwner)) { ?>
-                                                            <a class="dropdown-item viewDetailedButtonActive">View
+                                                            <a class="dropdown-item viewDetailedButtonActive"
+                                                            data-toggle="modal"
+                                                           data-target="#viewDetailedModalActive"
+                                                           data-backdrop="static"
+                                                           data-keyboard="false"
+                                                           id="<?php echo $frm->lab_form_id; ?>"
+                                                            >View
                                                                 Laboratory
                                                                 Form</a>
                                                             <a class="dropdown-item showOperationLabNotes"
@@ -890,6 +903,158 @@ $completedForms = $apiCaller->sendRequest(array(
 </div>
 
 
+<!-- View Detail Modal for waiting -->
+<div class="modal fade" id="viewDetailedModalWaiting" tabindex="-1" role="dialog"
+     aria-labelledby="viewDetailedModalWaitingTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="viewDetailedModalWaitingTitle">
+                    Operation: <strong id="optViewDW"></strong><br/>
+                    <!-- Nomination  Customer:<strong id="nomCustViewDW"></strong><br/>
+                    Customer: <strong id="custViewDW" style="text-transform:capitalize;"></strong><br/> 
+                    Buyer: <strong id="buyerViewDW" style="text-transform:capitalize;"></strong><br/>
+                    Seller: <strong id="sellerViewDW" style="text-transform:capitalize;"></strong><br/> -->
+                    Supplier: <strong id="supplierViewDW" style="text-transform:capitalize;"></strong>
+                </h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="font-size: 14px;">
+
+
+                <h6 style="font-size: 16px;">Informations</h6>
+                <hr/>
+                <form>
+                    <div class="form-row">
+                        <!-- <div class="form-group col-md-6">
+                            <label for="vesselViewDW">Vessel Name</label>
+                            <input type="text" class="form-control form-control-sm" id="vesselViewDW" readonly>
+                        </div> -->
+                        <div class="form-group col-md-12">
+                            <label for="goodsViewDW">Type Of Goods</label>
+                            <input type="text" class="form-control form-control-sm" id="goodsViewDW" readonly>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="amountViewDW">Amount</label>
+                            <input type="text" class="form-control form-control-sm" id="amountViewDW" readonly>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="ilocViewDW">Inspection Locations</label>
+                            <input type="text" class="form-control form-control-sm" id="ilocViewDW" readonly>
+                        </div>
+                    </div>
+                </form>
+
+                <h6 style="font-size: 16px; margin-top: 20px;">Requested Analysis</h6>
+                <hr/>
+                <div class="row" id="reqAnlViewDW">
+                </div>
+
+                <h6 style="font-size: 16px; margin-top: 20px;">Form Owner & Date</h6>
+                <hr/>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="">Officer & Creation Date</span>
+                    </div>
+                    <input type="text" class="form-control" id="officerViewDW" readonly>
+                    <input type="text" class="form-control" id="dateViewDW" readonly>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Waiting Modals for waiting-->
+
+
+
+<!-- View Detail Modal For Active -->
+<div class="modal fade" id="viewDetailedModalActive" tabindex="-1" role="dialog"
+     aria-labelledby="viewDetailedModalActiveTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="viewDetailedModalActiveTitle">
+                    Operation: <strong id="optViewDActive"></strong><br/>
+                    <!-- Nomination  Customer:<strong id="nomCustViewDActive"></strong><br/>
+                    Customer: <strong id="custViewDActive" style="text-transform:capitalize;"></strong><br/> 
+                    Buyer: <strong id="buyerViewDActive" style="text-transform:capitalize;"></strong><br/>
+                    Seller: <strong id="sellerViewDActive" style="text-transform:capitalize;"></strong><br/> -->
+                    Supplier: <strong id="supplierViewDActive" style="text-transform:capitalize;"></strong>
+                </h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="font-size: 14px;">
+
+
+                <h6 style="font-size: 16px;">Informations</h6>
+                <hr/>
+                <form>
+                    <div class="form-row">
+                        <!-- <div class="form-group col-md-6">
+                            <label for="vesselViewDActive">Vessel Name</label>
+                            <input type="text" class="form-control form-control-sm" id="vesselViewDActive" readonly>
+                        </div> -->
+                        <div class="form-group col-md-12">
+                            <label for="goodsViewDActive">Type Of Goods</label>
+                            <input type="text" class="form-control form-control-sm" id="goodsViewDActive" readonly>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="amountViewDActive">Amount</label>
+                            <input type="text" class="form-control form-control-sm" id="amountViewDActive" readonly>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="ilocViewDActive">Inspection Locations</label>
+                            <input type="text" class="form-control form-control-sm" id="ilocViewDActive" readonly>
+                        </div>
+                    </div>
+
+                </form>
+                <h6 style="font-size: 16px; margin-top: 20px;">Requested Analysis</h6>
+                <hr/>
+                <div class="row" id="reqAnlViewDActive">
+                </div>
+
+                <h6 style="font-size: 16px; margin-top: 20px;">Done Analysis</h6>
+                <hr/>
+                <div class="row" id="doneAnlViewDActive">
+                </div>
+
+                <h6 style="font-size: 16px; margin-top: 20px;">Form Owner & Date</h6>
+                <hr/>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="">Officer & Creation Date</span>
+                    </div>
+                    <input type="text" class="form-control" id="officerViewDActive" readonly>
+                    <input type="text" class="form-control" id="dateViewDActive" readonly>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Waiting Modals for active-->
+
+
 <script>
     var detectTab = readCookie('activeTab');
 
@@ -968,6 +1133,413 @@ $completedForms = $apiCaller->sendRequest(array(
             });
         });
         //END TABLE SORTING
+
+
+        
+
+        //BEGIN VIEW DETAILED ACTIVE
+        $('.viewDetailedButtonActive').on('click', function () {
+            var $row = $(this).closest("tr");
+            $('#optViewDActive').text("#" + $(this).prop('id'));
+            $('#vesselViewDActive').val($row.find('.waitingVessel').text());
+            $('#goodsViewDActive').val($row.find('.waitingGoods').text());
+            $('#amountViewDActive').val($row.find('.waitingAmount').text());
+            $('#officerViewDActive').val($row.find('.waitingOfficer').text());
+            $('#dateViewDActive').val($row.find('.waitingDate').text());
+
+            var optCust = $('#custViewDActive');
+            optCust.text('');
+            var optNomCust = $('#nomCustViewDActive');
+            optNomCust.text('');
+            var optBuyer = $('#buyerViewDActive');
+            optBuyer.text('');
+            var optSeller = $('#sellerViewDActive');
+            optSeller.text('');
+            var optSupplier = $('#supplierViewDActive');
+            optSupplier.text('');
+
+            var requestedSurvList = $('#reqSurvViewDActive');
+            requestedSurvList.empty();
+            var requestedAnlList = $('#reqAnlViewDActive');
+            requestedAnlList.empty();
+
+            var doneAnlList = $('#doneAnlViewDActive');
+            doneAnlList.empty();
+
+            var survTypeList = $('#survTypeViewDActive');
+            survTypeList.text('');
+            var procTypeList = $('#procTypeViewDActive');
+            procTypeList.text('');
+            var anlTypeList = $('#anlCondViewDActive');
+            anlTypeList.text('');
+
+
+            var postData = {selectedOperationDetW: $(this).prop('id')};
+            console.log($(this).prop('id'))
+            $.ajax({
+                type: 'POST',
+                url: 'laborant_operations.php',
+                data: postData,
+                dataType: 'text',
+                success: function (resultData) {
+
+                    var result = JSON.parse(resultData);
+
+                    if (result.hasOwnProperty('error')) {
+                        //Make error message
+                        alert("OOPS");
+                    }
+                    if (result.hasOwnProperty('operation_id')) {
+
+                        // if (result.customer != null) {
+                        //     optCust.text(urldecode(result.customer.company_name));
+                        // } else {
+                        //     optCust.text('-');
+                        // }
+
+                        if (result.nomination_customer != null) {
+                            optNomCust.text(urldecode(result.nomination_customer.company_name));
+                        } else {
+                            optNomCust.text('-');
+                        }
+
+                        // if (result.buyer != null) {
+                        //     optBuyer.text(urldecode(result.buyer));
+                        // } else {
+                        //     optBuyer.text('-');
+                        // }
+
+                        // if (result.seller != null) {
+                        //     optSeller.text(urldecode(result.seller));
+                        // } else {
+                        //     optSeller.text('-');
+                        // }
+
+                        if (result.supplier != null) {
+                            optSupplier.text(urldecode(result.supplier));
+                        } else {
+                            optSupplier.text('-');
+                        }
+
+                        if (result.surveillance_types.length > 0) {
+
+                            var survTString = "";
+
+                            result.surveillance_types.forEach(function (surv, index) {
+
+                                if (index === result.surveillance_types.length - 1 || result.surveillance_types.length === 1) {
+                                    survTString += surv.surveillance_type_name;
+                                } else {
+                                    survTString += (surv.surveillance_type_name + ", ");
+                                }
+
+                                survTypeList.text(survTString);
+
+                            });
+
+                        }
+
+                        if (result.process_types.length > 0) {
+
+                            var procTString = "";
+
+                            result.process_types.forEach(function (proc, index) {
+
+                                if (index === result.process_types.length - 1 || result.process_types.length === 1) {
+                                    procTString += proc.process_type_name;
+                                } else {
+                                    procTString += (proc.process_type_name + ", ");
+                                }
+
+                                procTypeList.text(procTString);
+
+                            });
+
+                        }
+
+                        if (result.analysis_conditions.length > 0) {
+
+                            var anlcTString = "";
+
+                            result.analysis_conditions.forEach(function (anlc, index) {
+
+                                if (index === result.analysis_conditions.length - 1 || result.analysis_conditions.length === 1) {
+                                    anlcTString += anlc.analysis_condition_name;
+                                } else {
+                                    anlcTString += (anlc.analysis_condition_name + ", ");
+                                }
+
+                                anlTypeList.text(anlcTString);
+
+                            });
+
+                        }
+
+                        if (result.offices.length > 0) {
+
+                            var officesString = "";
+
+                            result.offices.forEach(function (office, index) {
+
+                                if (index === result.offices.length - 1 || result.offices.length === 1) {
+                                    officesString += office.office_name;
+                                } else {
+                                    officesString += (office.office_name + ", ");
+                                }
+
+                            });
+
+                            $('#ilocViewDActive').val(officesString);
+                        }
+
+        
+
+                        if (result.laboratory_forms[0].analyzes.length > 0) {
+
+                            result.laboratory_forms[0].analyzes.forEach(function (anl, index) {
+
+                                const doneAnalysis = result.laboratory_forms[0].done_analysis.find(x => x.analysis_id === anl.analysis_id )
+    
+                                var anlDiv = $('<div>').prop('class', 'col-lg-4');
+                                var anlCustomDiv = $('<div>').prop('class', 'custom-control custom-checkbox');
+                                var anlInput = $('<input>').prop('type', 'checkbox').prop('class', 'custom-control-input').prop('id', 'reqAnlDetW' + anl.analysis_id).prop('checked', true).prop('disabled', true);
+                                let specString = "";
+                                if (anl.pivot.spec_info === null) {
+                                    specString = "No Information";
+                                } else {
+                                    specString = urldecode(anl.pivot.spec_info);
+                                }
+                                var anlLabel = $('<label>').prop('class', 'custom-control-label').prop('for', 'reqSurvDetW' + anl.analysis_id).css('white-space', 'pre-wrap').html(anl.analysis_name + "\n (Spec: " + specString + ")");
+
+                                requestedAnlList.append(anlDiv.append(anlCustomDiv.append(anlInput).append(anlLabel)));
+
+                            });
+
+                        } else {
+                            var thereIsNoAnlMessage = $('<div>').prop('class', 'text-center font-italic').text('There is no requested analyzes.');
+                            requestedAnlList.append(thereIsNoAnlMessage);
+                        }
+
+                        if (result.laboratory_forms[0].analyzes.length > 0) {
+
+                            result.laboratory_forms[0].analyzes.forEach(function (anl, index) {
+
+                                const doneAnalysis = result.laboratory_forms[0].done_analysis.find(x => x.analysis_id === anl.analysis_id )
+                                if (doneAnalysis.pivot.result) {
+                                    
+                                    var anlDiv = $('<div>').prop('class', 'col-lg-4');
+                                    var anlCustomDiv = $('<div>').prop('class', 'custom-control custom-checkbox');
+                                    var anlInput = $('<input>').prop('type', 'checkbox').prop('class', 'custom-control-input').prop('id', 'reqAnlDetW' + anl.analysis_id).prop('checked', true).prop('disabled', true);
+                                    let specString = "";
+                                    if (anl.pivot.spec_info === null) {
+                                        specString = "No Information";
+                                    } else {
+                                        specString = urldecode(anl.pivot.spec_info);
+                                    }
+                                    var anlLabel = $('<label>').prop('class', 'custom-control-label').prop('for', 'reqSurvDetW' + anl.analysis_id).css('white-space', 'pre-wrap').html(anl.analysis_name + "\n Result: <b>" +( doneAnalysis ? doneAnalysis.pivot.result : '- ') + "</b>" );
+
+                                    doneAnlList.append(anlDiv.append(anlCustomDiv.append(anlInput).append(anlLabel)));
+                                }
+
+                            });
+
+                            } else {
+                            var thereIsNoAnlMessage = $('<div>').prop('class', 'text-center font-italic').text('There is no requested analyzes.');
+                            requestedAnlList.append(thereIsNoAnlMessage);
+                            }
+
+                    }
+
+                }
+            });
+
+        });
+        //END VIEW DETAILED ACTIVE
+
+        //BEGIN VIEW DETAILED WAITING
+        $('.viewDetailedButtonWaiting').on('click', function () {
+            var $row = $(this).closest("tr");
+            $('#optViewDW').text("#" + $(this).prop('id'));
+            $('#vesselViewDW').val($row.find('.waitingVessel').text());
+            $('#goodsViewDW').val($row.find('.waitingGoods').text());
+            $('#amountViewDW').val($row.find('.waitingAmount').text());
+            $('#officerViewDW').val($row.find('.waitingOfficer').text());
+            $('#dateViewDW').val($row.find('.waitingDate').text());
+
+            var optCust = $('#custViewDW');
+            optCust.text('');
+            var optNomCust = $('#nomCustViewDW');
+            optNomCust.text('');
+            var optBuyer = $('#buyerViewDW');
+            optBuyer.text('');
+            var optSeller = $('#sellerViewDW');
+            optSeller.text('');
+            var optSupplier = $('#supplierViewDW');
+            optSupplier.text('');
+
+            var requestedSurvList = $('#reqSurvViewDW');
+            requestedSurvList.empty();
+            var requestedAnlList = $('#reqAnlViewDW');
+            requestedAnlList.empty();
+
+            var survTypeList = $('#survTypeViewDW');
+            survTypeList.text('');
+            var procTypeList = $('#procTypeViewDW');
+            procTypeList.text('');
+            var anlTypeList = $('#anlCondViewDW');
+            anlTypeList.text('');
+
+
+            var postData = {selectedOperationDetW: $(this).prop('id')};
+            console.log($(this).prop('id'))
+            $.ajax({
+                type: 'POST',
+                url: 'laborant_operations.php',
+                data: postData,
+                dataType: 'text',
+                success: function (resultData) {
+
+                    var result = JSON.parse(resultData);
+
+                    if (result.hasOwnProperty('error')) {
+                        //Make error message
+                        alert("OOPS");
+                    }
+                    if (result.hasOwnProperty('operation_id')) {
+
+                        // if (result.customer != null) {
+                        //     optCust.text(urldecode(result.customer.company_name));
+                        // } else {
+                        //     optCust.text('-');
+                        // }
+
+                        if (result.nomination_customer != null) {
+                            optNomCust.text(urldecode(result.nomination_customer.company_name));
+                        } else {
+                            optNomCust.text('-');
+                        }
+
+                        // if (result.buyer != null) {
+                        //     optBuyer.text(urldecode(result.buyer));
+                        // } else {
+                        //     optBuyer.text('-');
+                        // }
+
+                        // if (result.seller != null) {
+                        //     optSeller.text(urldecode(result.seller));
+                        // } else {
+                        //     optSeller.text('-');
+                        // }
+
+                        if (result.supplier != null) {
+                            optSupplier.text(urldecode(result.supplier));
+                        } else {
+                            optSupplier.text('-');
+                        }
+
+                        if (result.surveillance_types.length > 0) {
+
+                            var survTString = "";
+
+                            result.surveillance_types.forEach(function (surv, index) {
+
+                                if (index === result.surveillance_types.length - 1 || result.surveillance_types.length === 1) {
+                                    survTString += surv.surveillance_type_name;
+                                } else {
+                                    survTString += (surv.surveillance_type_name + ", ");
+                                }
+
+                                survTypeList.text(survTString);
+
+                            });
+
+                        }
+
+                        if (result.process_types.length > 0) {
+
+                            var procTString = "";
+
+                            result.process_types.forEach(function (proc, index) {
+
+                                if (index === result.process_types.length - 1 || result.process_types.length === 1) {
+                                    procTString += proc.process_type_name;
+                                } else {
+                                    procTString += (proc.process_type_name + ", ");
+                                }
+
+                                procTypeList.text(procTString);
+
+                            });
+
+                        }
+
+                        if (result.analysis_conditions.length > 0) {
+
+                            var anlcTString = "";
+
+                            result.analysis_conditions.forEach(function (anlc, index) {
+
+                                if (index === result.analysis_conditions.length - 1 || result.analysis_conditions.length === 1) {
+                                    anlcTString += anlc.analysis_condition_name;
+                                } else {
+                                    anlcTString += (anlc.analysis_condition_name + ", ");
+                                }
+
+                                anlTypeList.text(anlcTString);
+
+                            });
+
+                        }
+
+                        if (result.offices.length > 0) {
+
+                            var officesString = "";
+
+                            result.offices.forEach(function (office, index) {
+
+                                if (index === result.offices.length - 1 || result.offices.length === 1) {
+                                    officesString += office.office_name;
+                                } else {
+                                    officesString += (office.office_name + ", ");
+                                }
+
+                            });
+
+                            $('#ilocViewDW').val(officesString);
+                        }
+
+
+                        if (result.laboratory_forms[0].analyzes.length > 0) {
+
+                            result.laboratory_forms[0].analyzes.forEach(function (anl, index) {
+
+                                var anlDiv = $('<div>').prop('class', 'col-lg-4');
+                                var anlCustomDiv = $('<div>').prop('class', 'custom-control custom-checkbox');
+                                var anlInput = $('<input>').prop('type', 'checkbox').prop('class', 'custom-control-input').prop('id', 'reqAnlDetW' + anl.analysis_id).prop('checked', true).prop('disabled', true);
+                                let specString = "";
+                                if (anl.pivot.spec_info === null) {
+                                    specString = "No Information";
+                                } else {
+                                    specString = urldecode(anl.pivot.spec_info);
+                                }
+                                var anlLabel = $('<label>').prop('class', 'custom-control-label').prop('for', 'reqSurvDetW' + anl.analysis_id).css('white-space', 'pre-wrap').text(anl.analysis_name + "\n (Spec: " + specString + ") ");
+
+                                requestedAnlList.append(anlDiv.append(anlCustomDiv.append(anlInput).append(anlLabel)));
+
+                            });
+
+                        } else {
+                            var thereIsNoAnlMessage = $('<div>').prop('class', 'text-center font-italic').text('There is no requested analyzes.');
+                            requestedAnlList.append(thereIsNoAnlMessage);
+                        }
+
+                    }
+
+                }
+            });
+
+        });
+        //END VIEW DETAILED WAITING
 
         //BEGIN PRINT TABLE
         $('.printTable').on('click', function () {

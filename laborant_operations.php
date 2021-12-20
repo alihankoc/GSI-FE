@@ -1,5 +1,8 @@
 <?php
 include_once 'ApiCaller.php';
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 session_start();
 date_default_timezone_set('Asia/Istanbul');
@@ -11,7 +14,7 @@ function addOperationNoteForLab($apiCaller, $operationID, $operationNote)
 {
 
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/addNoteForLab',
+        'api_url' => $_ENV['LINK'].'addNoteForLab',
         'api_method' => 'post',
         'operationID' => $operationID,
         'operationNote' => $operationNote,
@@ -45,29 +48,31 @@ function addOperationNoteForLab($apiCaller, $operationID, $operationNote)
 function showMyNotes($apiCaller, $operationID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/showNotesForLab/' . $operationID,
+        'api_url' => $_ENV['LINK'].'showNotesForLab/' . $operationID,
         'api_method' => 'get',
     ));
 
     echo json_encode($response['data']);
 }
 
-function acceptForm($apiCaller, $labFormID)
+function acceptForm($apiCaller, $labFormID, $isExternal = false)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/acceptLabForm',
+        'api_url' => $_ENV['LINK'].'acceptLabForm',
         'api_method' => 'post',
         'labFormID' => $labFormID,
     ));
+
+    $redirect = $isExternal ? 'external_laboratory_analysis_page.php' : 'laboratory_analysis_page.php';
 
     if ($response['error'] == false) {
 
         if (isset($response['data']->success)) {
             setcookie("successfulAcceptLabForm", $response['data']->success, time() + 60 * 60 * 24 * 1);
-            header('Location: laboratory_analysis_page.php');
+            header('Location: '.$redirect);
         } elseif (isset($response['data']->error)) {
             setcookie("errorAcceptLabForm", $response['data']->error, time() + 60 * 60 * 24 * 1);
-            header('Location: laboratory_analysis_page.php');
+            header('Location: '.$redirect);
         }
 
     } elseif ($response['error'] == true) {
@@ -78,27 +83,27 @@ function acceptForm($apiCaller, $labFormID)
         } elseif ($response['status'] == "404") {
             echo "There is no such thing";
         } else {
-            header('Location: laboratory_analysis_page.php');
+            header('Location: '.$redirect);
         }
     }
 }
 
-function joinForm($apiCaller, $labFormID)
+function joinForm($apiCaller, $labFormID, $isExternal = false)
 {
+    $redirect = $isExternal ? 'external_laboratory_analysis_page.php' : 'laboratory_analysis_page.php';
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/joinLabForm',
+        'api_url' => $_ENV['LINK'].'joinLabForm',
         'api_method' => 'post',
         'labFormID' => $labFormID,
     ));
-
     if ($response['error'] == false) {
 
         if (isset($response['data']->success)) {
             setcookie("successfulJoinLabForm", $response['data']->success, time() + 60 * 60 * 24 * 1);
-            header('Location: laboratory_analysis_page.php');
+            header('Location: '.$redirect);
         } elseif (isset($response['data']->error)) {
             setcookie("errorJoinLabForm", $response['data']->error, time() + 60 * 60 * 24 * 1);
-            header('Location: laboratory_analysis_page.php');
+            header('Location: '.$redirect);
         }
 
     } elseif ($response['error'] == true) {
@@ -109,7 +114,7 @@ function joinForm($apiCaller, $labFormID)
         } elseif ($response['status'] == "404") {
             echo "There is no such thing";
         } else {
-            header('Location: laboratory_analysis_page.php');
+            header('Location: '.$redirect);
         }
     }
 }
@@ -117,7 +122,7 @@ function joinForm($apiCaller, $labFormID)
 function getStandards($apiCaller)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/getAllStandards',
+        'api_url' => $_ENV['LINK'].'getAllStandards',
         'api_method' => 'get',
     ));
 
@@ -127,7 +132,7 @@ function getStandards($apiCaller)
 function getSampleForLabForm($apiCaller, $laboratoryFormID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/getSamplesForAnalysis',
+        'api_url' => $_ENV['LINK'].'getSamplesForAnalysis',
         'api_method' => 'post',
         'laboratoryFormID' => $laboratoryFormID,
     ));
@@ -138,7 +143,7 @@ function getSampleForLabForm($apiCaller, $laboratoryFormID)
 function getConditionsForLabForm($apiCaller, $laboratoryFormID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/getAnlCForLaboratoryForm/' . $laboratoryFormID,
+        'api_url' => $_ENV['LINK'].'getAnlCForLaboratoryForm/' . $laboratoryFormID,
         'api_method' => 'get',
     ));
 
@@ -148,18 +153,18 @@ function getConditionsForLabForm($apiCaller, $laboratoryFormID)
 function getReqAnlayzesForLabForm($apiCaller, $laboratoryFormID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/getReqAnlForLaboratoryForm/' . $laboratoryFormID,
+        'api_url' => $_ENV['LINK'].'getReqAnlForLaboratoryForm/' . $laboratoryFormID,
         'api_method' => 'get',
     ));
 
     echo json_encode($response['data']);
 }
 
-function doAnalyzeForOperation($apiCaller, $labFormID, $sampleID, $conditionID, $standardID, $analysisID, $demandDate, $startDate, $endDate, $result, $remarks, $isSubcontractor, $subcontractorName, $subcontractorSendDate, $sampleArray, $conditionArray, $standardArray, $analysisArray, $demandArray, $startArray, $endArray, $resultArray, $remarksArray)
+function doAnalyzeForOperation($isExternal = false, $apiCaller, $labFormID, $sampleID, $conditionID, $standardID, $analysisID, $demandDate, $startDate, $endDate, $result, $remarks, $isSubcontractor, $subcontractorName, $subcontractorSendDate, $sampleArray, $conditionArray, $standardArray, $analysisArray, $demandArray, $startArray, $endArray, $resultArray, $remarksArray)
 {
-
+    $redirect = $isExternal ? 'external_laboratory_analysis_page.php' : 'laboratory_analysis_page.php';
     $apiArray = array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/makeNewAnalyze',
+        'api_url' => $_ENV['LINK'].'makeNewAnalyze',
         'api_method' => 'post',
         'labFormID' => $labFormID,
         'isSubcontractor' => $isSubcontractor,
@@ -204,15 +209,14 @@ function doAnalyzeForOperation($apiCaller, $labFormID, $sampleID, $conditionID, 
     }
 
     $response = $apiCaller->sendRequest($apiArray);
-
     if ($response['error'] == false) {
 
         if (isset($response['data']->success)) {
             setcookie("successfulMakeAnalyze", $response['data']->success, time() + 60 * 60 * 24 * 1);
-            header('Location: laboratory_analysis_page.php');
+            header('Location: '.$redirect);
         } elseif (isset($response['data']->error)) {
             setcookie("errorMakeAnalyze", $response['data']->error, time() + 60 * 60 * 24 * 1);
-            header('Location: laboratory_analysis_page.php');
+            header('Location: '.$redirect);
         }
 
     } elseif ($response['error'] == true) {
@@ -223,20 +227,66 @@ function doAnalyzeForOperation($apiCaller, $labFormID, $sampleID, $conditionID, 
         } elseif ($response['status'] == "404") {
             echo "There is no such thing";
         } else {
-            header('Location: laboratory_analysis_page.php');
+            header('Location: '.$redirect);
         }
     }
 
 }
 
+function newExternal ($apiCaller, $data) {
+    $response = $apiCaller->sendRequest(
+        array_merge(['api_url' => $_ENV['LINK'].'externalLabJob/',
+        'api_method' => 'post',], $data)
+        );
+
+    echo json_encode($response['data']);
+}
+
+function getOperationForDetailWaitingLaborant($apiCaller, $operationID)
+{
+    $response = $apiCaller->sendRequest(array(
+        'api_url' => $_ENV['LINK'].'viewDetailedWaitingLaborant/' . $operationID,
+        'api_method' => 'get',
+    ));
+
+    echo json_encode($response['data']);
+}
+
+function getLabFormDetailForWaitingLaborant($apiCaller, $labFormId)
+{
+    $response = $apiCaller->sendRequest(array(
+        'api_url' => $_ENV['LINK'].'getLabFormDetailForWaitingLaborant/' . $labFormId,
+        'api_method' => 'get',
+    ));
+
+    echo json_encode($response['data']);
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (isset($_POST["acceptLabFormID"]) && !empty($_POST["acceptLabFormID"])) {
-        acceptForm($apiCaller, $_POST["acceptLabFormID"]);
+        acceptForm($apiCaller, $_POST["acceptLabFormID"], $_POST["isExternal"]);
+    }
+
+    if (isset($_POST["newExternal"])) {
+        newExternal($apiCaller, $_POST);
+    }
+
+    
+    if (isset($_POST["selectedOperationDetW"]) && !empty($_POST["selectedOperationDetW"])) {
+        if (is_numeric($_POST["selectedOperationDetW"])) {
+            getOperationForDetailWaitingLaborant($apiCaller, $_POST["selectedOperationDetW"]);
+        }
+    }
+
+    if (isset($_POST["selectedLabDetW"]) && !empty($_POST["selectedLabDetW"])) {
+        if (is_numeric($_POST["selectedLabDetW"])) {
+            getLabFormDetailForWaitingLaborant($apiCaller, $_POST["selectedLabDetW"]);
+        }
     }
 
     if (isset($_POST["joinLabFormID"]) && !empty($_POST["joinLabFormID"])) {
-        joinForm($apiCaller, $_POST["joinLabFormID"]);
+        joinForm($apiCaller, $_POST["joinLabFormID"],$_POST["isExternal"]);
     }
 
     if (isset($_POST["labFormIDForSample"]) && !empty($_POST["labFormIDForSample"])) {
@@ -330,10 +380,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($_POST["isSubcontractor"] === "1") {
             if (isset($_POST["subcontractorName"]) && !empty($_POST["subcontractorName"]) && isset($_POST["subcontractorSendDate"]) && !empty($_POST["subcontractorSendDate"])) {
-                doAnalyzeForOperation($apiCaller, $_POST["enterAnalysisFormID"], $_POST["enterAnalysisSample1"], $_POST["enterAnalysisCondition1"], $_POST["enterAnalysisStandard1"], $_POST["enterAnalysisReq1"], $_POST["anlDemandDate1"], $_POST["anlStartDate1"], $_POST["anlEndDate1"], $_POST["anlResult1"], $_POST["anlRemarks1"], $_POST["isSubcontractor"], $_POST["subcontractorName"], $_POST["subcontractorSendDate"], $sampleArray, $conditionArray, $standardArray, $analysisArray, $demandArray, $startArray, $endArray, $resultArray, $remarksArray);
+                doAnalyzeForOperation($_POST['isExternal'], $apiCaller, $_POST["enterAnalysisFormID"], $_POST["enterAnalysisSample1"], $_POST["enterAnalysisCondition1"], $_POST["enterAnalysisStandard1"], $_POST["enterAnalysisReq1"], $_POST["anlDemandDate1"], $_POST["anlStartDate1"], $_POST["anlEndDate1"], $_POST["anlResult1"], $_POST["anlRemarks1"], $_POST["isSubcontractor"], $_POST["subcontractorName"], $_POST["subcontractorSendDate"], $sampleArray, $conditionArray, $standardArray, $analysisArray, $demandArray, $startArray, $endArray, $resultArray, $remarksArray);
             }
         } else {
-            doAnalyzeForOperation($apiCaller, $_POST["enterAnalysisFormID"], $_POST["enterAnalysisSample1"], $_POST["enterAnalysisCondition1"], $_POST["enterAnalysisStandard1"], $_POST["enterAnalysisReq1"], $_POST["anlDemandDate1"], $_POST["anlStartDate1"], $_POST["anlEndDate1"], $_POST["anlResult1"], $_POST["anlRemarks1"], $_POST["isSubcontractor"], null, null, $sampleArray, $conditionArray, $standardArray, $analysisArray, $demandArray, $startArray, $endArray, $resultArray, $remarksArray);
+            doAnalyzeForOperation($_POST['isExternal'], $apiCaller, $_POST["enterAnalysisFormID"], $_POST["enterAnalysisSample1"], $_POST["enterAnalysisCondition1"], $_POST["enterAnalysisStandard1"], $_POST["enterAnalysisReq1"], $_POST["anlDemandDate1"], $_POST["anlStartDate1"], $_POST["anlEndDate1"], $_POST["anlResult1"], $_POST["anlRemarks1"], $_POST["isSubcontractor"], null, null, $sampleArray, $conditionArray, $standardArray, $analysisArray, $demandArray, $startArray, $endArray, $resultArray, $remarksArray);
         }
     }
 

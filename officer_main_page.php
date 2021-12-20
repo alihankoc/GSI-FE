@@ -5,6 +5,9 @@
  * Date: 14.02.2019
  * Time: 02:54
  */
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 include_once "url_slug.php";
 include_once "ApiCaller.php";
@@ -40,54 +43,54 @@ switch ($_SESSION["user_type_id"]) {
 $apiCaller = new ApiCaller('1', $_SESSION['token']);
 
 $customers = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/viewCustomersForNewOperation',
+    'api_url' => $_ENV['LINK'].'viewCustomersForNewOperation',
     'api_method' => 'get',
 ));
 
 $inspectionLocations = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/viewMyOffices',
+    'api_url' => $_ENV['LINK'].'viewMyOffices',
     'api_method' => 'get',
 ));
 
 $surveillanceTypes = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/viewSurveillanceTypes',
+    'api_url' => $_ENV['LINK'].'viewSurveillanceTypes',
     'api_method' => 'get',
 ));
 
 $processTypes = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/viewProcessTypes',
+    'api_url' => $_ENV['LINK'].'viewProcessTypes',
     'api_method' => 'get',
 ));
 
 $analysisConditions = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/viewAnalysisConditions',
+    'api_url' => $_ENV['LINK'].'viewAnalysisConditions',
     'api_method' => 'get',
 ));
 
 $analyzes = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/viewAnalysises',
+    'api_url' => $_ENV['LINK'].'viewAnalysises',
     'api_method' => 'get',
 ));
 
 $surveillances = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/viewSurveillances',
+    'api_url' => $_ENV['LINK'].'viewSurveillances',
     'api_method' => 'get',
 ));
 
 $waitingOperations = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/getOperationsOfficer/1',
+    'api_url' => $_ENV['LINK'].'getOperationsOfficer/1',
     'api_method' => 'get',
 ));
 $activeOperations = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/getOperationsOfficer/2',
+    'api_url' => $_ENV['LINK'].'getOperationsOfficer/2',
     'api_method' => 'get',
 ));
 $completedOperations = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/getOperationsOfficer/3',
+    'api_url' => $_ENV['LINK'].'getOperationsOfficer/3',
     'api_method' => 'get',
 ));
 $myOperations = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/myOperations/3',
+    'api_url' => $_ENV['LINK'].'myOperations/3',
     'api_method' => 'get',
 ));
 ?>
@@ -1009,7 +1012,14 @@ $myOperations = $apiCaller->sendRequest(array(
                         </div>
                     </div>
                 </div>
-
+                <h6 style="font-size: 16px; margin-top: 20px;">Documents</h6>
+                <hr/>
+                <div class="row" id="reqViewDocuments">
+                </div>
+                <h6 style="font-size: 16px; margin-top: 20px;">Photos</h6>
+                <hr/>
+                <div class="row" id="reqViewPhotos">
+                </div>
 
                 <h6 style="font-size: 16px; margin-top: 30px;">Form Owner & Date</h6>
                 <hr/>
@@ -2607,6 +2617,11 @@ $myOperations = $apiCaller->sendRequest(array(
             var labFormList = $('#labFormViewDA');
             labFormList.empty();
 
+            var reqViewDocuments = $('#reqViewDocuments');
+            reqViewDocuments.empty();
+            var reqViewPhotos = $('#reqViewPhotos');
+            reqViewPhotos.empty();
+
             var survTypeList = $('#survTypeViewDA');
             survTypeList.text('');
             var procTypeList = $('#procTypeViewDA');
@@ -2777,7 +2792,8 @@ $myOperations = $apiCaller->sendRequest(array(
                         }
 
                         if (result.surveillance_forms.length > 0) {
-
+                            var PhotoCounter = 1
+                            var DocCounter = 1
                             result.surveillance_forms.forEach(function (srvF, index) {
 
                                 var srvFRowDiv = $('<div>').prop('class', 'row mt-1');
@@ -2787,6 +2803,33 @@ $myOperations = $apiCaller->sendRequest(array(
                                 var srvFIcon = $('<i>').prop('class', 'far fa-clipboard');
 
                                 survFormList.append(srvFRowDiv.append(srvFNameDiv).append(srvFButtonDiv.append(srvFButton.append(srvFIcon))));
+
+                                if (srvF.survey_docs.length > 0) {
+                                    //reqViewDocuments
+                                    srvF.survey_docs.forEach((doc, index) => {
+                                        var date = new Date(doc.created_at);
+                                        var lastDate = date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear();
+                                        var DocSrvFNameDiv = $('<div>').prop('class', 'col-lg-12 col-md-12 mt-1')
+                                        .html('<div>' + (DocCounter++) + '. <a href="'+doc.doc_path+'" target="_blank">'+ doc.doc_name  + '</a> by  <b>'+ doc.user.name + ' ' + doc.user.surname + '</b> at  <b>'+ lastDate +'</b> <a href="'+doc.doc_path+'" target="_blank" style="float: right;" class="pull-right btn btn-sm btn-info">Download</a>  </div>');
+    
+                                        reqViewDocuments.append(DocSrvFNameDiv);
+                                    })
+                                }
+                                if (srvF.survey_photos.length > 0) {
+                                    //reqViewDocuments
+                                    srvF.survey_photos.forEach((photo, index) => {
+                                        var date = new Date(photo.created_at);
+                                        var lastDate = date.getDate() + '-' + (date.getMonth()+1) + '-' + date.getFullYear();
+                                        var photoSrvFNameDiv = $('<div>').prop('class', 'col-lg-12 col-md-12  mt-1')
+                                        .html('<div><img src="'+photo.photo_path+'"  width="60" height="60" />  ' + (PhotoCounter++) + '. <a href="'+photo.photo_path+'" target="_blank">'+ photo.photo_name  + '</a> by <b> ' + photo.user.name + ' ' + photo.user.surname + '</b> at <b>'+ lastDate +'</b> <a target="_blank" href="'+photo.photo_path+'" style="float: right;" class="pull-right btn btn-sm btn-info">Download</a> </div>');
+    
+                                        reqViewPhotos.append(photoSrvFNameDiv);                              
+                                    })
+                                }
+                                if (srvF.survey_photos.length > 0) {
+                                    console.log('photo var.')
+                                }
+
                             });
 
                         } else {
@@ -2808,7 +2851,7 @@ $myOperations = $apiCaller->sendRequest(array(
                                 var labFRowDiv = $('<div>').prop('class', 'row mt-1');
                                 var labFNameDiv = $('<div>').prop('class', 'col-lg-6 col-md-6 font-weight-bold').text("Laboratory Form #" + labF.lab_form_id + " " + formType);
                                 var labFButtonDiv = $('<div>').prop('class', 'col-lg-6 col-md-6');
-                                var labFButton = $('<button>').prop('type', 'button').prop('class', 'btn btn-primary btn-sm').text('View Form ');
+                                var labFButton = $('<a>').prop('role', 'button').prop('class', 'btn btn-primary btn-sm').prop('target', '_blank').prop('href', 'lab_info_form.php?singleLabFormID=' + labF.lab_form_id).text('View Forn');
                                 var labFIcon = $('<i>').prop('class', 'far fa-clipboard');
 
                                 labFormList.append(labFRowDiv.append(labFNameDiv).append(labFButtonDiv.append(labFButton.append(labFIcon))));

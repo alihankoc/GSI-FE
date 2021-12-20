@@ -1,4 +1,7 @@
 <?php
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 include_once "url_slug.php";
 include_once "ApiCaller.php";
@@ -33,7 +36,7 @@ switch ($_SESSION["user_type_id"]) {
 $apiCaller = new ApiCaller('1', $_SESSION['token']);
 
 $samples = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/getAllSamples',
+    'api_url' => $_ENV['LINK'].'getAllSamples',
     'api_method' => 'get',
 ));
 
@@ -45,7 +48,7 @@ foreach ($samples['data'] as $sample) {
 }
 
 $operations = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/getOperationsForNewSample',
+    'api_url' => $_ENV['LINK'].'getOperationsForNewSample',
     'api_method' => 'get',
 ));
 ?>

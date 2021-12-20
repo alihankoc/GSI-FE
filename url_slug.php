@@ -1,4 +1,7 @@
 <?php
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 function url_slug($str, $options = array()) {
 	// Make sure string is in UTF-8 and strip invalid UTF-8 characters

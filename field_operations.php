@@ -1,4 +1,7 @@
 <?php
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 include_once 'ApiCaller.php';
 
@@ -12,7 +15,7 @@ function addOperationNoteForField($apiCaller, $operationID, $operationNote)
 {
 
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/addNoteForField',
+        'api_url' => $_ENV['LINK'].'addNoteForField',
         'api_method' => 'post',
         'operationID' => $operationID,
         'operationNote' => $operationNote,
@@ -46,7 +49,7 @@ function addOperationNoteForField($apiCaller, $operationID, $operationNote)
 function showMyNotes($apiCaller, $operationID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/showNotesForField/' . $operationID,
+        'api_url' => $_ENV['LINK'].'showNotesForField/' . $operationID,
         'api_method' => 'get',
     ));
 
@@ -57,7 +60,7 @@ function addOperationExpense($apiCaller, $operationID, $operationExpense, $expen
 {
 
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/addExpense',
+        'api_url' => $_ENV['LINK'].'addExpense',
         'api_method' => 'post',
         'operationID' => $operationID,
         'operationExpenseContent' => $operationExpense,
@@ -91,7 +94,7 @@ function addOperationExpense($apiCaller, $operationID, $operationExpense, $expen
 function showMyExpenses($apiCaller, $operationID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/showExpensesForIns/' . $operationID,
+        'api_url' => $_ENV['LINK'].'showExpensesForIns/' . $operationID,
         'api_method' => 'get',
     ));
 
@@ -102,7 +105,7 @@ function showMyExpenses($apiCaller, $operationID)
 function acceptOperation($apiCaller, $operationID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/acceptOperation',
+        'api_url' => $_ENV['LINK'].'acceptOperation',
         'api_method' => 'post',
         'operationID' => $operationID,
     ));
@@ -133,7 +136,7 @@ function acceptOperation($apiCaller, $operationID)
 function joinOperation($apiCaller, $operationID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/joinOperation/',
+        'api_url' => $_ENV['LINK'].'joinOperation/',
         'api_method' => 'post',
         'operationID' => $operationID,
     ));
@@ -164,7 +167,7 @@ function joinOperation($apiCaller, $operationID)
 function getOperationForDetailWaitingField($apiCaller, $operationID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/viewDetailedWaitingField/' . $operationID,
+        'api_url' => $_ENV['LINK'].'viewDetailedWaitingField/' . $operationID,
         'api_method' => 'get',
     ));
 
@@ -174,7 +177,7 @@ function getOperationForDetailWaitingField($apiCaller, $operationID)
 function getOperationForSurvInfo($apiCaller, $operationID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/getOperationForSurvInfo/' . $operationID,
+        'api_url' => $_ENV['LINK'].'getOperationForSurvInfo/' . $operationID,
         'api_method' => 'get',
     ));
 
@@ -184,7 +187,7 @@ function getOperationForSurvInfo($apiCaller, $operationID)
 function getDetailsForSurvPhotos($apiCaller, $operationID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/getOperationWithSurvPhotos/' . $operationID,
+        'api_url' => $_ENV['LINK'].'getOperationWithSurvPhotos/' . $operationID,
         'api_method' => 'get',
     ));
 
@@ -194,7 +197,7 @@ function getDetailsForSurvPhotos($apiCaller, $operationID)
 function getDetailsForSurvDocuments($apiCaller, $operationID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/getOperationWithSurvDocuments/' . $operationID,
+        'api_url' => $_ENV['LINK'].'getOperationWithSurvDocuments/' . $operationID,
         'api_method' => 'get',
     ));
 
@@ -205,7 +208,7 @@ function surveillanceInfoSaveChanges($apiCaller, $equipmenType, $vesselArrive, $
 {
 
     $apiArray = array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/saveChangesOfSurveillanceInfoForm',
+        'api_url' => $_ENV['LINK'].'saveChangesOfSurveillanceInfoForm',
         'api_method' => 'post',
         'equipmentType' => $equipmenType,
         'vesselArrive' => $vesselArrive,
@@ -264,7 +267,7 @@ function surveillanceInfoSaveChanges($apiCaller, $equipmenType, $vesselArrive, $
 function surveillanceInfoComplete($apiCaller, $surveillanceFormID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/completeSurveillanceInfoForm',
+        'api_url' => $_ENV['LINK'].'completeSurveillanceInfoForm',
         'api_method' => 'post',
         'surveillanceInfoFormID' => $surveillanceFormID,
     ));
@@ -276,7 +279,7 @@ function uploadPhoto($apiCaller, $file, $surveillanceInfoForm)
 {
 
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/uploadSurvPhoto',
+        'api_url' => $_ENV['LINK'].'uploadSurvPhoto',
         'api_method' => 'file',
         'myFile' => $file,
         'survPhotoFormID' => $surveillanceInfoForm,
@@ -308,7 +311,7 @@ function removePhoto($apiCaller, $removeFormID, $surveyPhotos)
 {
 
     $apiArray = array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/removeSurvPhoto',
+        'api_url' => $_ENV['LINK'].'removeSurvPhoto',
         'api_method' => 'post',
         'removeFromSurvID' => $removeFormID,
     );
@@ -345,7 +348,7 @@ function uploadDocument($apiCaller, $file, $surveillanceInfoForm)
 {
 
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/uploadSurvDoc',
+        'api_url' => $_ENV['LINK'].'uploadSurvDoc',
         'api_method' => 'file',
         'myFile' => $file,
         'survDocumentFormID' => $surveillanceInfoForm,
@@ -377,7 +380,7 @@ function removeDocument($apiCaller, $removeFormID, $surveyDocuments)
 {
 
     $apiArray = array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/removeSurvDoc',
+        'api_url' => $_ENV['LINK'].'removeSurvDoc',
         'api_method' => 'post',
         'removeDocFormID' => $removeFormID,
     );

@@ -5,6 +5,9 @@
  * Date: 28.02.2019
  * Time: 03:01
  */
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 date_default_timezone_set('Asia/Istanbul');
 
@@ -19,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["email"]) && isset($_PO
     );
 
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, 'https://lumen.krekpot.com/auth/login');
+    curl_setopt($ch, CURLOPT_URL, 'http://localhost:8080/auth/login');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_ENCODING, '');
     curl_setopt($ch, CURLOPT_MAXREDIRS, 10);

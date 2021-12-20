@@ -5,6 +5,9 @@
  * Date: 5.05.2019
  * Time: 04:00
  */
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 include_once "url_slug.php";
 include_once 'ApiCaller.php';
@@ -27,22 +30,22 @@ if (!isset($_SESSION["token"])) {
 $apiCaller = new ApiCaller('1', $_SESSION["token"]);
 
 $analysises = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/viewAnalysises',
+    'api_url' => $_ENV['LINK'].'viewAnalysises',
     'api_method' => 'get',
 ));
 
 $analysisConditions = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/viewAnalysisConditions',
+    'api_url' => $_ENV['LINK'].'viewAnalysisConditions',
     'api_method' => 'get',
 ));
 
 $surveillanceTypes = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/viewSurveillanceTypes',
+    'api_url' => $_ENV['LINK'].'viewSurveillanceTypes',
     'api_method' => 'get',
 ));
 
 $processTypes = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/viewProcessTypes',
+    'api_url' => $_ENV['LINK'].'viewProcessTypes',
     'api_method' => 'get',
 ));
 ?>

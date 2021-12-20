@@ -5,6 +5,9 @@
  * Date: 26.04.2019
  * Time: 00:17
  */
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 class ApiCaller
 {

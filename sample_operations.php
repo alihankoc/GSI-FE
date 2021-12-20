@@ -1,5 +1,8 @@
 <?php
 include_once 'ApiCaller.php';
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 session_start();
 date_default_timezone_set('Asia/Istanbul');
@@ -10,7 +13,7 @@ $apiCaller = new ApiCaller('1', $_SESSION["token"]);
 function getAllSamplesExcel($apiCaller, $sampleHtmlContent)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/downloadAllSamplesExcel',
+        'api_url' => $_ENV['LINK'].'downloadAllSamplesExcel',
         'api_method' => 'post',
         'isDownload' => true,
         'htmlContent' => $sampleHtmlContent,
@@ -38,7 +41,7 @@ function createSample($apiCaller, $sampleName, $typeOfGoods, $deliveryMethod, $d
 {
 
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/addNewSample',
+        'api_url' => $_ENV['LINK'].'addNewSample',
         'api_method' => 'post',
         'sampleName' => $sampleName,
         'typeOfGoods' => $typeOfGoods,
@@ -76,7 +79,7 @@ function createSample($apiCaller, $sampleName, $typeOfGoods, $deliveryMethod, $d
 function unavailableSample($apiCaller, $sampleID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/makeUnavailable',
+        'api_url' => $_ENV['LINK'].'makeUnavailable',
         'api_method' => 'post',
         'sampleID' => $sampleID,
     ));
@@ -107,7 +110,7 @@ function unavailableSample($apiCaller, $sampleID)
 function availableSample($apiCaller, $sampleID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/makeAvailable',
+        'api_url' => $_ENV['LINK'].'makeAvailable',
         'api_method' => 'post',
         'sampleID' => $sampleID,
     ));
@@ -138,7 +141,7 @@ function availableSample($apiCaller, $sampleID)
 function deleteSample($apiCaller, $sampleID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/deleteSample',
+        'api_url' => $_ENV['LINK'].'deleteSample',
         'api_method' => 'delete',
         'sampleID' => $sampleID,
     ));

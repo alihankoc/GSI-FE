@@ -6,6 +6,9 @@
  * Time: 00:19
  */
 
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 include_once 'ApiCaller.php';
 
@@ -18,7 +21,7 @@ $apiCaller = new ApiCaller('1', $_SESSION["token"]);
 function getOperationForInformCustomer($apiCaller, $operationID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/viewOperationForInformCustomer/' . $operationID,
+        'api_url' => $_ENV['LINK'].'viewOperationForInformCustomer/' . $operationID,
         'api_method' => 'get',
     ));
 
@@ -28,7 +31,7 @@ function getOperationForInformCustomer($apiCaller, $operationID)
 function finishOperation($apiCaller, $operationID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/finishOperation',
+        'api_url' => $_ENV['LINK'].'finishOperation',
         'api_method' => 'post',
         'operationID' => $operationID,
     ));
@@ -59,7 +62,7 @@ function finishOperation($apiCaller, $operationID)
 function finishAnywayOperation($apiCaller, $operationID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/finishAnywayOperation',
+        'api_url' => $_ENV['LINK'].'finishAnywayOperation',
         'api_method' => 'post',
         'operationID' => $operationID,
     ));
@@ -70,7 +73,7 @@ function finishAnywayOperation($apiCaller, $operationID)
 function cancelOperation($apiCaller, $operationID, $explanation)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/cancelOperation',
+        'api_url' => $_ENV['LINK'].'cancelOperation',
         'api_method' => 'post',
         'operationID' => $operationID,
         'explanation' => $explanation,
@@ -102,7 +105,7 @@ function cancelOperation($apiCaller, $operationID, $explanation)
 function getOperationForDetailActive($apiCaller, $operationID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/viewDetailedActive/' . $operationID,
+        'api_url' => $_ENV['LINK'].'viewDetailedActive/' . $operationID,
         'api_method' => 'get',
     ));
 
@@ -112,7 +115,7 @@ function getOperationForDetailActive($apiCaller, $operationID)
 function getOperationForDetailWaitingOfficer($apiCaller, $operationID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/viewDetailedWaitingOfficer/' . $operationID,
+        'api_url' => $_ENV['LINK'].'viewDetailedWaitingOfficer/' . $operationID,
         'api_method' => 'get',
     ));
 
@@ -122,7 +125,7 @@ function getOperationForDetailWaitingOfficer($apiCaller, $operationID)
 function getDepartmentStatuses($apiCaller, $operationID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/viewDepartmentStatuses/' . $operationID,
+        'api_url' => $_ENV['LINK'].'viewDepartmentStatuses/' . $operationID,
         'api_method' => 'get',
     ));
 
@@ -132,7 +135,7 @@ function getDepartmentStatuses($apiCaller, $operationID)
 function showOperationExpenses($apiCaller, $operationID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/showExpenses/' . $operationID,
+        'api_url' => $_ENV['LINK'].'showExpenses/' . $operationID,
         'api_method' => 'get',
     ));
 
@@ -142,7 +145,7 @@ function showOperationExpenses($apiCaller, $operationID)
 function getOperationNotes($apiCaller, $operationID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/showNotesForOfficer/' . $operationID,
+        'api_url' => $_ENV['LINK'].'showNotesForOfficer/' . $operationID,
         'api_method' => 'get',
     ));
 
@@ -153,7 +156,7 @@ function addOperationNoteForOfficer($apiCaller, $operationID, $operationNote, $n
 {
 
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/addNoteForOfficer',
+        'api_url' => $_ENV['LINK'].'addNoteForOfficer',
         'api_method' => 'post',
         'operationID' => $operationID,
         'operationNote' => $operationNote,
@@ -191,7 +194,7 @@ function newOperation($apiCaller, $customer, $nominationCustomer, $buyer, $selle
 {
 
     $apiArray = array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/newOperation',
+        'api_url' => $_ENV['LINK'].'newOperation',
         'api_method' => 'post',
         'customer' => $customer,
         'nominationCustomer' => $nominationCustomer,
@@ -259,7 +262,7 @@ function editOperation($apiCaller, $operationID, $customer, $nominationCustomer,
 {
 
     $apiArray = array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/editOperation',
+        'api_url' => $_ENV['LINK'].'editOperation',
         'api_method' => 'post',
         'operationID' => $operationID,
         'customer' => $customer,

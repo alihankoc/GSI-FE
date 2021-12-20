@@ -2,6 +2,9 @@
 
 include_once "url_slug.php";
 include_once "ApiCaller.php";
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 session_start();
 date_default_timezone_set('Asia/Istanbul');
@@ -29,7 +32,7 @@ $apiCaller = new ApiCaller('1', $_SESSION['token']);
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["singleLaboratoryFormID"]) && !empty($_GET["singleLaboratoryFormID"])) {
     if (is_numeric($_GET["singleSurveillanceFormID"])) {
         $survForm = $apiCaller->sendRequest(array(
-            'api_url' => 'https://lumen.krekpot.com/api/v1/viewSingleLaboratoryFormOfficer/' . $_GET["singleLaboratoryFormID"],
+            'api_url' => $_ENV['LINK'].'viewSingleLaboratoryFormOfficer/' . $_GET["singleLaboratoryFormID"],
             'api_method' => 'get',
         ));
         ?>

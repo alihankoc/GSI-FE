@@ -7,6 +7,9 @@
  */
 session_start();
 date_default_timezone_set('Asia/Istanbul');
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 include_once "url_slug.php";
 

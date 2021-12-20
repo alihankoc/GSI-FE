@@ -1,6 +1,8 @@
 <?php
-
 include_once 'ApiCaller.php';
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 session_start();
 
@@ -12,7 +14,7 @@ function generateCertificate($apiCaller, $certificateNo, $certificateJobName, $c
 {
 
     $apiArray = array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/generateCertificate',
+        'api_url' => $_ENV['LINK'].'generateCertificate',
         'api_method' => 'post',
         'certificateNo' => $certificateNo,
         'certificateJobName' => $certificateJobName,
@@ -51,7 +53,7 @@ function generateCertificate($apiCaller, $certificateNo, $certificateJobName, $c
 function approveCertificate($apiCaller, $certificateID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/approveCertificate',
+        'api_url' => $_ENV['LINK'].'approveCertificate',
         'api_method' => 'post',
         'approveCertificateID' => $certificateID,
     ));
@@ -82,7 +84,7 @@ function approveCertificate($apiCaller, $certificateID)
 function removeDraftCertificate($apiCaller, $certificateID)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/removeDraftCertificate',
+        'api_url' => $_ENV['LINK'].'removeDraftCertificate',
         'api_method' => 'post',
         'removeDraftCertificateID' => $certificateID,
     ));

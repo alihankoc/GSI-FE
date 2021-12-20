@@ -1,4 +1,7 @@
 <?php
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 include_once "url_slug.php";
 include_once "ApiCaller.php";
@@ -32,7 +35,7 @@ $apiCaller = new ApiCaller('1', $_SESSION['token']);
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["singleSurveillanceFormID"]) && !empty($_GET["singleSurveillanceFormID"])) {
     if (is_numeric($_GET["singleSurveillanceFormID"])) {
         $survForm = $apiCaller->sendRequest(array(
-            'api_url' => 'https://lumen.krekpot.com/api/v1/viewSingleSurveillanceFormOfficer/' . $_GET["singleSurveillanceFormID"],
+            'api_url' => $_ENV['LINK'].'viewSingleSurveillanceFormOfficer/' . $_GET["singleSurveillanceFormID"],
             'api_method' => 'get',
         ));
         ?>

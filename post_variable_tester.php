@@ -6,6 +6,9 @@
  * Time: 20:57
  */
 
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     foreach ($_POST as $key => $value) {

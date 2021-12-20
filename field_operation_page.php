@@ -5,6 +5,9 @@
  * Date: 14.02.2019
  * Time: 02:54
  */
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 include_once "url_slug.php";
 include_once "ApiCaller.php";
@@ -40,19 +43,19 @@ switch ($_SESSION["user_type_id"]) {
 $apiCaller = new ApiCaller('1', $_SESSION['token']);
 
 $waitingOperations = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/getOperationsField/1',
+    'api_url' => $_ENV['LINK'].'getOperationsField/1',
     'api_method' => 'get',
 ));
 $activeOperations = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/getOperationsField/2',
+    'api_url' => $_ENV['LINK'].'getOperationsField/2',
     'api_method' => 'get',
 ));
 $completedOperations = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/getOperationsField/3',
+    'api_url' => $_ENV['LINK'].'getOperationsField/3',
     'api_method' => 'get',
 ));
 $equipments = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/viewEquipmentTypes/',
+    'api_url' => $_ENV['LINK'].'viewEquipmentTypes/',
     'api_method' => 'get',
 ));
 ?>

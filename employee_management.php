@@ -8,6 +8,9 @@
 
 include_once "url_slug.php";
 include_once 'ApiCaller.php';
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 session_start();
 
@@ -27,17 +30,17 @@ if (!isset($_SESSION["token"])) {
 $apiCaller = new ApiCaller('1', $_SESSION["token"]);
 
 $users = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/viewUsers',
+    'api_url' => $_ENV['LINK'].'viewUsers',
     'api_method' => 'get',
 ));
 
 $userTypes = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/viewUserTypes',
+    'api_url' => $_ENV['LINK'].'viewUserTypes',
     'api_method' => 'get',
 ));
 
 $locations = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/viewLocations',
+    'api_url' => $_ENV['LINK'].'viewLocations',
     'api_method' => 'get',
 ));
 ?>

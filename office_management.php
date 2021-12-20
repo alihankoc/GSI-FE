@@ -5,6 +5,9 @@
  * Date: 5.05.2019
  * Time: 04:00
  */
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 include_once "url_slug.php";
 include_once 'ApiCaller.php';
@@ -27,12 +30,12 @@ if (!isset($_SESSION["token"])) {
 $apiCaller = new ApiCaller('1', $_SESSION["token"]);
 
 $offices = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/viewOffices',
+    'api_url' => $_ENV['LINK'].'viewOffices',
     'api_method' => 'get',
 ));
 
 $locations = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/viewLocations',
+    'api_url' => $_ENV['LINK'].'viewLocations',
     'api_method' => 'get',
 ));
 ?>

@@ -5,6 +5,9 @@
  * Date: 14.02.2019
  * Time: 02:54
  */
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 include_once "url_slug.php";
 include_once "ApiCaller.php";
@@ -40,7 +43,7 @@ switch ($_SESSION["user_type_id"]) {
 $apiCaller = new ApiCaller('1', $_SESSION['token']);
 
 $certificates = $apiCaller->sendRequest(array(
-    'api_url' => 'https://lumen.krekpot.com/api/v1/viewCertificates',
+    'api_url' => $_ENV['LINK'].'viewCertificates',
     'api_method' => 'get',
 ));
 

@@ -6,6 +6,9 @@
  * Time: 21:25
  */
 session_start();
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 include_once 'ApiCaller.php';
 
@@ -14,7 +17,7 @@ $apiCaller = new ApiCaller('1', $_SESSION["token"]);
 function sendMyFile($apiCaller, $file)
 {
     $response = $apiCaller->sendRequest(array(
-        'api_url' => 'https://lumen.krekpot.com/api/v1/uploadSurvDoc',
+        'api_url' => $_ENV['LINK'].'uploadSurvDoc',
         'api_method' => 'file',
         'myFile' => $file,
     ));

@@ -5,6 +5,9 @@
  * Date: 28.02.2019
  * Time: 05:11
  */
+include 'vendor/autoload.php';
+$dotenv =\Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
 
 session_start();
 ob_start();
