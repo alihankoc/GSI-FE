@@ -1047,6 +1047,9 @@ $completedForms = $apiCaller->sendRequest(array(
 
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-danger confirmCompleteFormButton" value="1">Complete
+                    Form
+                </button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -1054,7 +1057,27 @@ $completedForms = $apiCaller->sendRequest(array(
 </div>
 <!-- End Waiting Modals for active-->
 
-
+<!-- Accept Laboratory Form Modal -->
+<div id="warnAcceptW" class="modal fade confirmCompleteFormModal" role="dialog" data-backdrop="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                Warning
+            </div>
+            <form id="completeLabForm" action="#" method="post">
+                <input type="hidden" name="completeLabFormID" id="completeLabFormID"/>
+                <div class="modal-body">
+                    <p>Are you sure?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"  data-dismiss="modal" class="btn btn-secondary closeAcceptFormModal">Close</button>
+                    <button type="submit" class="btn btn-primary"  data-value="1">Complete Form</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <script>
     var detectTab = readCookie('activeTab');
 
@@ -1062,7 +1085,26 @@ $completedForms = $apiCaller->sendRequest(array(
         var multipleCounter = 2;
 
         $('[data-toggle="popover"]').popover();
+        $('#completeLabForm').submit(function (e) {
+            e.preventDefault()
+            const data = $(this).serialize()
+            $.ajax({
+                type: 'POST',
+                data: data,
+                dataType: 'JSON',
+                headers: {
+                    'Authorization': 'Bearer <?php echo $_SESSION['token']; ?>'
+                },
+                url: '<?php echo $_ENV['LINK']; ?>completeOperationalJob',
+                success (s) {
+                    window.location.reload()
+                }
+            })
+        })
 
+        $('.confirmCompleteFormButton').click(function() {
+            $('.confirmCompleteFormModal').modal('show')
+        })
 
         $('#isSubcontractor1').click(function () {
             $('#subcontractorName').prop('disabled', false);

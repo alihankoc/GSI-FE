@@ -929,7 +929,7 @@ $waitingForms = $apiCaller->sendRequest(array(
                 },
                 url: '<?php echo $_ENV['LINK']; ?>completeLabJob',
                 success (s) {
-                    console.log(s)
+                    window.location.reload()
                 }
             })
         })
