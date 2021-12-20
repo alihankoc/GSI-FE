@@ -1216,8 +1216,9 @@ $completedForms = $apiCaller->sendRequest(array(
             anlTypeList.text('');
 
 
-            var postData = {selectedOperationDetW: $(this).prop('id')};
-            console.log($(this).prop('id'))
+            const idOfForm = $(this).prop('id')
+            $('#completeLabFormID').val(idOfForm)
+            var postData = {selectedOperationDetW: idOfForm};
             $.ajax({
                 type: 'POST',
                 url: 'laborant_operations.php',
