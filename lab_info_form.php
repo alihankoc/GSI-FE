@@ -250,18 +250,13 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["singleLabFormID"]) && !e
                         $analysis_demand_date = (is_int($key) && $key > -1) ? $form->done_analysis[$key]->pivot->analysis_demand_date : ' - ';
                         $analysis_start_date = (is_int($key) && $key > -1) ? $form->done_analysis[$key]->pivot->analysis_start_date : ' - ';
                         $analysis_end_date = (is_int($key) && $key > -1) ? $form->done_analysis[$key]->pivot->analysis_end_date : ' - ';
-                        $key = null;
+                        
                     ?>
                     <div class="col-10">
                         <div class="row">
                             <div class="col-6 border">
                             <?php
                                 echo '<b>Spec:</b> (' .  $analy->pivot->spec_info   .   '), ';
-                            ?>
-                            </div>
-                            <div class="col-6 border">
-                            <?php
-                                echo '<b>Result:</b> '. $result .   ', ';
                             ?>
                             </div>
                             <div class="col-6 border">
@@ -300,13 +295,122 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["singleLabFormID"]) && !e
                                echo '<b>Analysis End Date:</b> '. $analysis_end_date  ;
                             ?>
                             </div>
-                            <div class="col-6 border">
-
+                            <div class="col-2 border">
+                            <?php
+                               echo '<b>Result 1:</b> <br>'. ((is_int($key) && $key > -1) ? ($form->done_analysis[$key]->pivot->result && $form->done_analysis[$key]->pivot->result !== '' ?  $form->done_analysis[$key]->pivot->result : '-') : ' - ');
+                            ?>
+                            </div>
+                            <div class="col-2 border">
+                            <?php
+                               echo '<b>Result 2:</b> <br>'. ((is_int($key) && $key > -1) ? ($form->done_analysis[$key]->pivot->result_2 && $form->done_analysis[$key]->pivot->result_2 !== '' ?  $form->done_analysis[$key]->pivot->result_2 : '-') : ' - ');
+                            ?>
+                            </div>
+                            <div class="col-2 border">
+                            <?php
+                               echo '<b>Result 3:</b> <br>'. ((is_int($key) && $key > -1) ? ($form->done_analysis[$key]->pivot->result_3 && $form->done_analysis[$key]->pivot->result_3 !== '' ?  $form->done_analysis[$key]->pivot->result_3 : '-') : ' - ');
+                            ?>
+                            </div>
+                            <div class="col-2 border">
+                            <?php
+                               echo '<b>Result 4:</b> <br>'. ((is_int($key) && $key > -1) ? ($form->done_analysis[$key]->pivot->result_4 && $form->done_analysis[$key]->pivot->result_4 !== '' ?  $form->done_analysis[$key]->pivot->result_4 : '-') : ' - ');
+                            ?>
+                            </div>
+                            <div class="col-2 border">
+                            <?php
+                               echo '<b>Result 5:</b> <br>'. ((is_int($key) && $key > -1) ? ($form->done_analysis[$key]->pivot->result_5 && $form->done_analysis[$key]->pivot->result_5 !== '' ?  $form->done_analysis[$key]->pivot->result_5 : '-') : ' - ');
+                            ?>
+                            </div>
+                            <div class="col-2 border">
+                            <?php
+                               echo '<b>Result 6:</b> <br>'. ((is_int($key) && $key > -1) ? ($form->done_analysis[$key]->pivot->result_6 && $form->done_analysis[$key]->pivot->result_6 !== '' ?  $form->done_analysis[$key]->pivot->result_6 : '-') : ' - ');
+                            ?>
+                            </div>
+                            <div class="col-2 border">
+                            <?php
+                               echo '<b>Result 7:</b> <br>'. ((is_int($key) && $key > -1) ? ($form->done_analysis[$key]->pivot->result_7 && $form->done_analysis[$key]->pivot->result_7 !== '' ?  $form->done_analysis[$key]->pivot->result_7 : '-') : ' - ');
+                            ?>
+                            </div>
+                            <div class="col-2 border">
+                            <?php
+                               echo '<b>Result 8:</b> <br>'. ((is_int($key) && $key > -1) ? ($form->done_analysis[$key]->pivot->result_8 && $form->done_analysis[$key]->pivot->result_8 !== '' ?  $form->done_analysis[$key]->pivot->result_8 : '-') : ' - ');
+                            ?>
+                            </div>
+                            <div class="col-2 border">
+                            <?php
+                               echo '<b>Result 9:</b> <br>'. ((is_int($key) && $key > -1) ? ($form->done_analysis[$key]->pivot->result_9 && $form->done_analysis[$key]->pivot->result_9 !== '' ?  $form->done_analysis[$key]->pivot->result_9 : '-') : ' - ');
+                            ?>
+                            </div>
+                            <div class="col-2 border">
+                            <?php
+                               echo '<b>Result 10:</b> <br>'. ((is_int($key) && $key > -1) ? ($form->done_analysis[$key]->pivot->result_10 && $form->done_analysis[$key]->pivot->result_10 !== '' ?  $form->done_analysis[$key]->pivot->result_10 : '-') : ' - ');
+                            ?>
+                            </div>
+                            <div class="col-2 border">
+                            <?php
+                               echo '<b>Result 11:</b> <br>'. ((is_int($key) && $key > -1) ? ($form->done_analysis[$key]->pivot->result_11 && $form->done_analysis[$key]->pivot->result_11 !== '' ?  $form->done_analysis[$key]->pivot->result_11 : '-') : ' - ');
+                            ?>
+                            </div>
+                            <div class="col-2 border">
+                            <?php
+                               echo '<b>Result 12:</b> <br>'. ((is_int($key) && $key > -1) ? ($form->done_analysis[$key]->pivot->result_12 && $form->done_analysis[$key]->pivot->result_12 !== '' ?  $form->done_analysis[$key]->pivot->result_12 : '-') : ' - ');
+                            ?>
+                            </div>
+                            <div class="col-2 border">
+                            <?php
+                               echo '<b>Result 13:</b> <br>'. ((is_int($key) && $key > -1) ? ($form->done_analysis[$key]->pivot->result_13 && $form->done_analysis[$key]->pivot->result_13 !== '' ?  $form->done_analysis[$key]->pivot->result_13 : '-') : ' - ');
+                            ?>
+                            </div>
+                            <div class="col-2 border">
+                            <?php
+                               echo '<b>Result 14:</b> <br>'. ((is_int($key) && $key > -1) ? ($form->done_analysis[$key]->pivot->result_14 && $form->done_analysis[$key]->pivot->result_14 !== '' ?  $form->done_analysis[$key]->pivot->result_14 : '-') : ' - ');
+                            ?>
+                            </div>
+                            <div class="col-2 border">
+                            <?php
+                               echo '<b>Result 15:</b> <br>'. ((is_int($key) && $key > -1) ? ($form->done_analysis[$key]->pivot->result_15 && $form->done_analysis[$key]->pivot->result_15 !== '' ?  $form->done_analysis[$key]->pivot->result_15 : '-') : ' - ');
+                            ?>
+                            </div>
+                            <div class="col-2 border">
+                            <?php
+                               echo '<b>Result 16:</b> <br>'. ((is_int($key) && $key > -1) ? ($form->done_analysis[$key]->pivot->result_16 && $form->done_analysis[$key]->pivot->result_16 !== '' ?  $form->done_analysis[$key]->pivot->result_16 : '-') : ' - ');
+                            ?>
+                            </div>
+                            <div class="col-2 border">
+                            <?php
+                               echo '<b>Result 17:</b> <br>'. ((is_int($key) && $key > -1) ? ($form->done_analysis[$key]->pivot->result_17 && $form->done_analysis[$key]->pivot->result_17 !== '' ?  $form->done_analysis[$key]->pivot->result_17 : '-') : ' - ');
+                            ?>
+                            </div>
+                            <div class="col-2 border">
+                            <?php
+                               echo '<b>Result 18:</b> <br>'. ((is_int($key) && $key > -1) ? ($form->done_analysis[$key]->pivot->result_18 && $form->done_analysis[$key]->pivot->result_18 !== '' ?  $form->done_analysis[$key]->pivot->result_18 : '-') : ' - ');
+                            ?>
+                            </div>
+                            <div class="col-2 border">
+                            <?php
+                               echo '<b>Result 19:</b> <br>'. ((is_int($key) && $key > -1) ? ($form->done_analysis[$key]->pivot->result_19 && $form->done_analysis[$key]->pivot->result_19 !== '' ?  $form->done_analysis[$key]->pivot->result_19 : '-') : ' - ');
+                            ?>
+                            </div>
+                            <div class="col-2 border">
+                            <?php
+                               echo '<b>Result 20:</b> <br>'. ((is_int($key) && $key > -1) ? ($form->done_analysis[$key]->pivot->result_20 && $form->done_analysis[$key]->pivot->result_20 !== '' ?  $form->done_analysis[$key]->pivot->result_20 : '-') : ' - ');
+                            ?>
+                            </div>
+                            <div class="col-4 border">
+                            <?php
+                               echo '<b>Result AVG:</b> <br>'. ((is_int($key) && $key > -1) ? ($form->done_analysis[$key]->pivot->result_avg && $form->done_analysis[$key]->pivot->result_avg !== '' ?  $form->done_analysis[$key]->pivot->result_avg : '-') : ' - ');
+                            ?>
+                            </div>
+                            <div class="col-4 border">
+                            <?php
+                               echo '<b>Result COMP:</b> <br>'. ((is_int($key) && $key > -1) ? ($form->done_analysis[$key]->pivot->result_comp && $form->done_analysis[$key]->pivot->result_comp !== '' ?  $form->done_analysis[$key]->pivot->result_comp : '-') : ' - ');
+                            ?>
                             </div>
                         </div>
                     </div>
                 
                     <?php
+
+                    $key = null;
                     }
                     ?>
                 </div>
